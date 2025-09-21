@@ -11,6 +11,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.NavHost
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.kalkulatorfinal.ui.screens.CalculatorScreen
+import com.example.kalkulatorfinal.ui.screens.SelectOptionScreen
+import com.example.kalkulatorfinal.ui.screens.SummaryScreen
 import com.example.kalkulatorfinal.ui.theme.KalkulatorFinalTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,13 +29,25 @@ class MainActivity : ComponentActivity() {
         setContent {
             KalkulatorFinalTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    GameScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
+    }
+}
+
+@Composable
+fun GameScreen(modifier: Modifier = Modifier) {
+    val navController = rememberNavController()
+    NavigationGraph(navController = navController)
+}
+
+@Composable
+fun NavigationGraph(navController: NavHostController) {
+    NavHost(navController = navController, startDestination = "select-option") {
+        composable("select-option") { SelectOptionScreen(navController = navController) }
+        composable("game-screen") { CalculatorScreen(navController = navController) }
+        composable("summary-screen") { SummaryScreen(navController = navController) }
     }
 }
 
