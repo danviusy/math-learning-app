@@ -8,24 +8,30 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.kalkulatorfinal.ui.CalculatorViewModel
 import com.example.kalkulatorfinal.ui.components.Dialog
 
 
 @Composable
 fun CalculatorScreen(navController: NavController) {
     var showDialog by remember { mutableStateOf(false) }
+    val viewModel: CalculatorViewModel = viewModel()
+    val noEquations = viewModel.getPref()
+
     Scaffold { innerPadding ->
         Column (
             modifier = Modifier
                 .padding(innerPadding)
         ) {
 
-            Text("Dette er spill-skjermen")
+            Text("Antall regnestykker:  ${noEquations.toString()}")
             Button(onClick = {navController.navigate("summary-screen")} ) {
                 Text("Fullfør spillet")
             }
