@@ -8,9 +8,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import com.example.kalkulatorfinal.ui.CalculatorViewModel
 
 @Composable
-fun SummaryScreen(navController: NavController) {
+fun SummaryScreen(navController: NavController, viewModel: CalculatorViewModel) {
     Scaffold { innerPadding ->
         Column (
             modifier = Modifier

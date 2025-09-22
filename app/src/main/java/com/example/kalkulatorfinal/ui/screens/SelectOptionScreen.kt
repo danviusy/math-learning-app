@@ -17,8 +17,7 @@ import androidx.navigation.NavController
 import com.example.kalkulatorfinal.ui.CalculatorViewModel
 
 @Composable
-fun SelectOptionScreen(navController: NavController) {
-    val viewModel: CalculatorViewModel = viewModel()
+fun SelectOptionScreen(navController: NavController, viewModel: CalculatorViewModel) {
     var noEquations by remember { mutableIntStateOf(5) }
 
 
@@ -29,20 +28,23 @@ fun SelectOptionScreen(navController: NavController) {
         ) {
             Text("Velg antall regnestykker")
             Button(onClick = {
-                navController.navigate("game-screen")
                 viewModel.setPref(5)
+                viewModel.resetGame()
+                navController.navigate("game-screen")
             } ) {
                 Text("5")
             }
             Button(onClick = {
-                navController.navigate("game-screen")
                 viewModel.setPref(10)
+                viewModel.resetGame()
+                navController.navigate("game-screen")
             } ) {
                 Text("10")
             }
             Button(onClick = {
-                navController.navigate("game-screen")
                 viewModel.setPref(15)
+                viewModel.resetGame()
+                navController.navigate("game-screen")
             } ) {
                 Text("15")
             }

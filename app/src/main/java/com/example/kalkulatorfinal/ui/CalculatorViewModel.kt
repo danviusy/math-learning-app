@@ -1,11 +1,32 @@
 package com.example.kalkulatorfinal.ui
 
 import android.app.Application
+import android.content.Context
 import android.content.SharedPreferences
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
+import com.example.kalkulatorfinal.R
+import com.example.kalkulatorfinal.data.CalculatorUiState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class CalculatorViewModel(application: Application): AndroidViewModel(application) {
+
+    private val _uiState = MutableStateFlow(CalculatorUiState())
+    val uiState: StateFlow<CalculatorUiState> = _uiState.asStateFlow()
+
+    private val res = application.resources
+
+    val firstArray = res.getStringArray(R.array.first_numbers)
+    val secondArray = res.getStringArray(R.array.second_numbers)
+    val firstNumbers: MutableList<String> = mutableListOf()
+    val secondNumbers: MutableList<String> = mutableListOf()
+
+    var currentIndex: Int = 0
+
+    // and then answers
+    private var usedEquationsIndex: MutableSet<Int> = mutableSetOf()
     fun setPref(noEquations: Int) {
         val sharedPreferences: SharedPreferences = application.getSharedPreferences("My Preferences",
             android.content.Context.MODE_PRIVATE)
@@ -14,9 +35,42 @@ class CalculatorViewModel(application: Application): AndroidViewModel(applicatio
         editor.apply()
     }
 
-    fun getPref(): Int? {
+    fun getPref(): Int {
         val sharedPreferences: SharedPreferences = application.getSharedPreferences("My Preferences",
             android.content.Context.MODE_PRIVATE)
         return sharedPreferences.getInt("noEquations", 5)
     }
+
+    fun resetGame() {
+        firstNumbers.clear()
+        secondNumbers.clear()
+        usedEquationsIndex.clear()
+        currentIndex = 0
+       createEquations(getPref())
+        _uiState.value = CalculatorUiState(
+            score = 0,
+            currentFirstNumber = firstNumbers[currentIndex],
+            currentSecondNumber = secondNumbers[currentIndex]
+        )
+    }
+
+    private fun createEquations(noEquations: Int) {
+        for (i in 0..noEquations - 1) {
+            val index = pickRandomIndex()
+            firstNumbers.add(firstArray[index])
+            secondNumbers.add(secondArray[index])
+            // and then answers
+        }
+    }
+
+    private fun pickRandomIndex(): Int {
+        val randomIndex = firstArray.indices.random()
+        return if (usedEquationsIndex.contains(randomIndex)) {
+            pickRandomIndex()
+        } else {
+            usedEquationsIndex.add(randomIndex)
+            randomIndex
+        }
+    }
+
 }

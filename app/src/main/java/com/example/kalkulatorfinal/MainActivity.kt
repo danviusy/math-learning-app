@@ -17,12 +17,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.kalkulatorfinal.ui.CalculatorViewModel
 import com.example.kalkulatorfinal.ui.components.Dialog
 import com.example.kalkulatorfinal.ui.screens.CalculatorScreen
 import com.example.kalkulatorfinal.ui.screens.SelectOptionScreen
@@ -51,10 +53,12 @@ fun GameScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun NavigationGraph(navController: NavHostController) {
+    val calculatorViewModel: CalculatorViewModel = viewModel()
+
     NavHost(navController = navController, startDestination = "select-option") {
-        composable("select-option") { SelectOptionScreen(navController = navController) }
-        composable("game-screen") { CalculatorScreen(navController = navController) }
-        composable("summary-screen") { SummaryScreen(navController = navController) }
+        composable("select-option") { SelectOptionScreen(navController = navController, calculatorViewModel) }
+        composable("game-screen") { CalculatorScreen(navController = navController, calculatorViewModel) }
+        composable("summary-screen") { SummaryScreen(navController = navController, calculatorViewModel) }
     }
 }
 
