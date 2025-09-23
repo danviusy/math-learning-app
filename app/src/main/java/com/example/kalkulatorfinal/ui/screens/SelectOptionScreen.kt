@@ -19,34 +19,53 @@ import com.example.kalkulatorfinal.ui.CalculatorViewModel
 @Composable
 fun SelectOptionScreen(navController: NavController, viewModel: CalculatorViewModel) {
     var noEquations by remember { mutableIntStateOf(5) }
+    val interruptStatus = viewModel.getInterruptStatus()
 
+    if (interruptStatus) {
+        viewModel.setInterruptStatus(true)
+        viewModel.interruptRound()
+    }
 
     Scaffold { innerPadding ->
         Column (
             modifier = Modifier
                 .padding(innerPadding)
         ) {
-            Text("Velg antall regnestykker")
-            Button(onClick = {
-                viewModel.setPref(5)
-                viewModel.resetGame()
-                navController.navigate("game-screen")
-            } ) {
-                Text("5")
-            }
-            Button(onClick = {
-                viewModel.setPref(10)
-                viewModel.resetGame()
-                navController.navigate("game-screen")
-            } ) {
-                Text("10")
-            }
-            Button(onClick = {
-                viewModel.setPref(15)
-                viewModel.resetGame()
-                navController.navigate("game-screen")
-            } ) {
-                Text("15")
+
+
+            Text(viewModel.noQuestionsLeft().toString())
+
+
+            if (viewModel.noQuestionsLeft() >= 5) {
+                Text("Gjenstående antall regnestykker: ${viewModel.noQuestionsLeft().toString()}")
+                Text("Velg antall regnestykker")
+                Button(onClick = {
+                    viewModel.setPref(5)
+                    viewModel.resetGame()
+                    navController.navigate("game-screen")
+                } ) {
+                    Text("5")
+                }
+                if (viewModel.noQuestionsLeft() >= 10) {
+                    Button(onClick = {
+                        viewModel.setPref(10)
+                        viewModel.resetGame()
+                        navController.navigate("game-screen")
+                    }) {
+                        Text("10")
+                    }
+                    if (viewModel.noQuestionsLeft() >= 15) {
+                        Button(onClick = {
+                            viewModel.setPref(15)
+                            viewModel.resetGame()
+                            navController.navigate("game-screen")
+                        }) {
+                            Text("15")
+                        }
+                    }
+                }
+            } else {
+                Text("Du har gått tom for spørsmål!")
             }
         }
     }

@@ -39,7 +39,9 @@ fun CalculatorScreen(navController: NavController, viewModel: CalculatorViewMode
     val firstNumber = calcUiState.value.currentFirstNumber
     val secondNumber = calcUiState.value.currentSecondNumber
     val score = calcUiState.value.score
+    var roundIndex by remember { mutableStateOf(1) }
     var answer by remember { mutableStateOf("") }
+    var correctGuess: Boolean? by remember { mutableStateOf(null) }
 
     Scaffold { innerPadding ->
         Column (
@@ -47,24 +49,37 @@ fun CalculatorScreen(navController: NavController, viewModel: CalculatorViewMode
                 .padding(innerPadding)
         ) {
 
-            Text("Antall regnestykker:  ${noEquations.toString()}")
-            Text("Score: ${score.toString()}")
+            if (roundIndex >= noEquations) {
+                navController.navigate("summary-screen")
+            }
+
+            Text("Runde: ${roundIndex} / ${noEquations.toString()}")
+            Text("Score: ${score.toString()} / ${noEquations.toString()} ")
 
             EquationRow(firstNumber, secondNumber, answer, modifier = Modifier)
 
             SendButton(answer, "Send", {
                 viewModel.checkAnswer(answer)
+                correctGuess = viewModel.answerCorrect(answer)
                 answer = ""
+                roundIndex = roundIndex + 1
+
             })
+
+            if (correctGuess == true) {
+                Text("Correct!")
+            } else if (correctGuess == false) {
+                Text("Wrong, answer was ${viewModel.getAnswer()}")
+            }
 
             CalculatorPad(onNumberClick = { number ->
                 answer += number
             } )
 
 
-            Button(onClick = {navController.navigate("summary-screen")} ) {
+            /* Button(onClick = {navController.navigate("summary-screen")} ) {
                 Text("Fullfør spillet")
-            }
+            } */
             Button(
                 onClick = { showDialog = true }
             ) {
@@ -75,6 +90,7 @@ fun CalculatorScreen(navController: NavController, viewModel: CalculatorViewMode
                     onDismissRequest = {showDialog = false },
                     onConfirmation = {
                         showDialog = false
+                        viewModel.setInterruptStatus(true)
                         navController.navigate("select-option")
                     },
                     dialogTitle = "Avslutte spillet",

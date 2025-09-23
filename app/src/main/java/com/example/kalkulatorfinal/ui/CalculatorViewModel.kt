@@ -24,8 +24,13 @@ class CalculatorViewModel(application: Application): AndroidViewModel(applicatio
     val firstNumbers: MutableList<String> = mutableListOf()
     val secondNumbers: MutableList<String> = mutableListOf()
     val answers: MutableList<String> = mutableListOf()
+    private val _interruptStatus = MutableStateFlow(false)
+    val interruptStatus: StateFlow<Boolean> = _interruptStatus.asStateFlow()
+
+    var checkPointIndex = 0
 
     var currentIndex: Int = 0
+
 
     // and then answers
     private var usedEquationsIndex: MutableSet<Int> = mutableSetOf()
@@ -44,16 +49,24 @@ class CalculatorViewModel(application: Application): AndroidViewModel(applicatio
     }
 
     fun resetGame() {
-        firstNumbers.clear()
-        secondNumbers.clear()
-        usedEquationsIndex.clear()
-        currentIndex = 0
+        // firstNumbers.clear()
+        // secondNumbers.clear()
+        // usedEquationsIndex.clear()
+        // currentIndex = 0
        createEquations(getPref())
         _uiState.value = CalculatorUiState(
             score = 0,
             currentFirstNumber = firstNumbers[currentIndex],
             currentSecondNumber = secondNumbers[currentIndex]
         )
+    }
+
+    fun interruptRound() {
+        firstNumbers.clear()
+        secondNumbers.clear()
+        answers.clear()
+        usedEquationsIndex.clear()
+        currentIndex = 0
     }
 
     private fun createEquations(noEquations: Int) {
@@ -75,6 +88,16 @@ class CalculatorViewModel(application: Application): AndroidViewModel(applicatio
         }
     }
 
+    fun outOfQuestions(): Boolean {
+        return currentIndex >= (firstArray.size - 1)
+    }
+
+    fun noQuestionsLeft(): Int {
+        val totalNoQuestions = firstArray.size
+        return totalNoQuestions - currentIndex
+    }
+
+
     fun checkAnswer(guess: String) {
         currentIndex++
         if (guess.equals(answers[currentIndex - 1])) {
@@ -92,4 +115,24 @@ class CalculatorViewModel(application: Application): AndroidViewModel(applicatio
         }
     }
 
+    fun answerCorrect(guess: String): Boolean {
+        return if (guess.equals(answers[currentIndex - 1])) {
+            true
+        } else {
+            false
+        }
+    }
+
+
+    fun getAnswer() : String {
+        return answers[currentIndex - 1]
+    }
+
+    fun setInterruptStatus(status: Boolean) {
+        _interruptStatus.value = status
+    }
+
+    fun getInterruptStatus(): Boolean {
+        return _interruptStatus.value
+    }
 }
