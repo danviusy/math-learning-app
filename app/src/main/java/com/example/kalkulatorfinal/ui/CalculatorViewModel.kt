@@ -20,8 +20,10 @@ class CalculatorViewModel(application: Application): AndroidViewModel(applicatio
 
     val firstArray = res.getStringArray(R.array.first_numbers)
     val secondArray = res.getStringArray(R.array.second_numbers)
+    val answerArray = res.getStringArray(R.array.answers)
     val firstNumbers: MutableList<String> = mutableListOf()
     val secondNumbers: MutableList<String> = mutableListOf()
+    val answers: MutableList<String> = mutableListOf()
 
     var currentIndex: Int = 0
 
@@ -59,7 +61,7 @@ class CalculatorViewModel(application: Application): AndroidViewModel(applicatio
             val index = pickRandomIndex()
             firstNumbers.add(firstArray[index])
             secondNumbers.add(secondArray[index])
-            // and then answers
+            answers.add(answerArray[index])
         }
     }
 
@@ -70,6 +72,23 @@ class CalculatorViewModel(application: Application): AndroidViewModel(applicatio
         } else {
             usedEquationsIndex.add(randomIndex)
             randomIndex
+        }
+    }
+
+    fun checkAnswer(guess: String) {
+        currentIndex++
+        if (guess.equals(answers[currentIndex - 1])) {
+            _uiState.value = CalculatorUiState(
+                score = _uiState.value.score + 1,
+                currentFirstNumber = firstNumbers[currentIndex],
+                currentSecondNumber = secondNumbers[currentIndex],
+            )
+        } else {
+            _uiState.value = CalculatorUiState(
+                score = _uiState.value.score,
+                currentFirstNumber = firstNumbers[currentIndex],
+                currentSecondNumber = secondNumbers[currentIndex],
+            )
         }
     }
 
