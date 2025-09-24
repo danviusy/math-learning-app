@@ -18,6 +18,7 @@ fun Dialog(
     AlertDialog(
         icon = {},
         title = { Text(text = dialogTitle) },
+        text = {Text(text = dialogText)},
         onDismissRequest = {onDismissRequest()},
         confirmButton =  {
             TextButton(
@@ -32,6 +33,7 @@ fun Dialog(
             ) {
                 Text("Dismiss")
             }
-        }
+        },
+
     )
 }

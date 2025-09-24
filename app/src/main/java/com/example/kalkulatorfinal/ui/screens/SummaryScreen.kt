@@ -18,7 +18,7 @@ fun SummaryScreen(navController: NavController, viewModel: CalculatorViewModel) 
                 .padding(innerPadding)
         ) {
             Text("Du har fullført spillet!")
-            Button(onClick = {navController.navigate("select-option")} ) {
+            Button(onClick = {navController.navigate("start-screen")} ) {
                 Text("Spill igjen?")
             }
         }

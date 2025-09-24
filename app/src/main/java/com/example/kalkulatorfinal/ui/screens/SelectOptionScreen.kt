@@ -32,9 +32,7 @@ fun SelectOptionScreen(navController: NavController, viewModel: CalculatorViewMo
                 .padding(innerPadding)
         ) {
 
-
             Text(viewModel.noQuestionsLeft().toString())
-
 
             if (viewModel.noQuestionsLeft() >= 5) {
                 Text("Gjenstående antall regnestykker: ${viewModel.noQuestionsLeft().toString()}")
@@ -64,8 +62,6 @@ fun SelectOptionScreen(navController: NavController, viewModel: CalculatorViewMo
                         }
                     }
                 }
-            } else {
-                Text("Du har gått tom for spørsmål!")
             }
         }
     }

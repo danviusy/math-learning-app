@@ -28,6 +28,7 @@ import com.example.kalkulatorfinal.ui.CalculatorViewModel
 import com.example.kalkulatorfinal.ui.components.Dialog
 import com.example.kalkulatorfinal.ui.screens.CalculatorScreen
 import com.example.kalkulatorfinal.ui.screens.SelectOptionScreen
+import com.example.kalkulatorfinal.ui.screens.StartScreen
 import com.example.kalkulatorfinal.ui.screens.SummaryScreen
 import com.example.kalkulatorfinal.ui.theme.KalkulatorFinalTheme
 
@@ -55,7 +56,8 @@ fun GameScreen(modifier: Modifier = Modifier) {
 fun NavigationGraph(navController: NavHostController) {
     val calculatorViewModel: CalculatorViewModel = viewModel()
 
-    NavHost(navController = navController, startDestination = "select-option") {
+    NavHost(navController = navController, startDestination = "start-screen") {
+        composable("start-screen") { StartScreen(navController = navController, calculatorViewModel) }
         composable("select-option") { SelectOptionScreen(navController = navController, calculatorViewModel) }
         composable("game-screen") { CalculatorScreen(navController = navController, calculatorViewModel) }
         composable("summary-screen") { SummaryScreen(navController = navController, calculatorViewModel) }
