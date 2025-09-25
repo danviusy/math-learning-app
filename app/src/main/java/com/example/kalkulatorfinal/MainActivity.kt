@@ -26,6 +26,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.kalkulatorfinal.ui.CalculatorViewModel
 import com.example.kalkulatorfinal.ui.components.Dialog
+import com.example.kalkulatorfinal.ui.screens.About
 import com.example.kalkulatorfinal.ui.screens.CalculatorScreen
 import com.example.kalkulatorfinal.ui.screens.SelectOptionScreen
 import com.example.kalkulatorfinal.ui.screens.StartScreen
@@ -61,6 +62,7 @@ fun NavigationGraph(navController: NavHostController) {
         composable("select-option") { SelectOptionScreen(navController = navController, calculatorViewModel) }
         composable("game-screen") { CalculatorScreen(navController = navController, calculatorViewModel) }
         composable("summary-screen") { SummaryScreen(navController = navController, calculatorViewModel) }
+        composable("about-screen") { About(navController = navController, calculatorViewModel) }
     }
 }
 
