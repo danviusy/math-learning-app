@@ -1,7 +1,8 @@
 package com.example.kalkulatorfinal.ui.screens
 
-import android.R
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,8 +15,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -29,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,6 +46,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.kalkulatorfinal.ui.CalculatorViewModel
 import com.example.kalkulatorfinal.ui.components.Dialog
+import com.example.kalkulatorfinal.ui.theme.Orange80
+import com.example.kalkulatorfinal.R
+import com.example.kalkulatorfinal.ui.components.AnswerDialog
 
 
 @Composable
@@ -73,28 +85,31 @@ fun CalculatorScreen(navController: NavController, viewModel: CalculatorViewMode
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Column (
-                        modifier = Modifier
-                            .background(
-                                color = Color.Green,
-                                shape = RoundedCornerShape(8.dp)
-                            )
-                            .padding(8.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-
+                    Box(
+                        modifier = Modifier.size(60.dp),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Text("Runde: ${roundIndex} / ${noEquations.toString()}")
-                        // Text("Score: ${score.toString()} / ${noEquations.toString()} ")
+                        Image(
+                            painter = painterResource(id = R.drawable.matte_icon),
+                            contentDescription = "Logo",
+                            modifier = Modifier.fillMaxSize()
+                        )
                     }
+                    Text("${roundIndex} / ${noEquations.toString()}", fontSize = 24.sp)
+
                     Button(
-                        modifier = Modifier
-                            .padding(8.dp),
-                        colors = ButtonDefaults.buttonColors(Color.Red, Color.White),
+                        modifier = Modifier,
+                        colors = ButtonDefaults.buttonColors(Orange80, Color.White),
                         onClick = { showDialog = true },
-                        shape = RoundedCornerShape(8.dp),
+                        shape = RoundedCornerShape(50),
 
                     ) {
-                        Text("Avslutt spillet")
+                        Icon(
+                            imageVector = Icons.Filled.Home,
+                            contentDescription = "Hjem",
+                            tint = Color.White,
+                            modifier = Modifier.size(32.dp)
+                        )
                     }
                 }
 
@@ -116,22 +131,35 @@ fun CalculatorScreen(navController: NavController, viewModel: CalculatorViewMode
 
             if (showAnswerDialog == true) {
                 if (correctGuess == true) {
-                    Dialog(
-                        onDismissRequest = {showAnswerDialog = false },
+                    AnswerDialog(
+                        icon = {
+                            Icon(
+                            imageVector = Icons.Filled.CheckCircle,
+                            contentDescription = "Riktig",
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(72.dp)
+                        )},
                         onConfirmation = {
                             showAnswerDialog = false
                         },
-                        dialogTitle = "Correct!",
-                        dialogText = "Correct!"
+                        dialogTitle = "Riktig!",
+                        dialogText = ""
                     )
+
                 } else {
-                    Dialog(
-                        onDismissRequest = {showAnswerDialog = false },
+                    AnswerDialog(
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Filled.Clear,
+                                contentDescription = "Feil",
+                                tint = Orange80,
+                                modifier = Modifier.size(72.dp)
+                            )},
                         onConfirmation = {
                             showAnswerDialog = false
                         },
-                        dialogTitle = "Wrong!",
-                        dialogText = "Wrong, answer was ${viewModel.getAnswer()}"
+                        dialogTitle = "Feil!",
+                        dialogText = "Svaret var ${viewModel.getAnswer()}"
                     )
                 }
 
@@ -157,12 +185,6 @@ fun CalculatorScreen(navController: NavController, viewModel: CalculatorViewMode
             )
 
 
-
-
-
-
-
-
             if (showDialog) {
                 Dialog(
                     onDismissRequest = {showDialog = false },
@@ -171,8 +193,16 @@ fun CalculatorScreen(navController: NavController, viewModel: CalculatorViewMode
                         viewModel.setInterruptStatus(true)
                         navController.navigate("start-screen")
                     },
-                    dialogTitle = "Avslutte spillet",
-                    dialogText = "Er du sikker på at du vil avslutte spillet?"
+                    dialogTitle = "Avslutt spill",
+                    dialogText = "Er du sikker på at du vil avslutte spillet?",
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Filled.Home,
+                            contentDescription = "Hjem",
+                            tint = Orange80,
+                            modifier = Modifier.size(72.dp)
+                        )
+                    }
                 )
             }
         }
@@ -253,7 +283,8 @@ fun Equation(
 ) {
     Column(
         modifier = modifier
-            .background(Color(0xFF2E7D32), RoundedCornerShape(8.dp))
+            .background(MaterialTheme.colorScheme.tertiary, shape = RoundedCornerShape(8.dp))
+            .border(width = 2.dp, color = Orange80, shape = RoundedCornerShape(8.dp))
             .padding(40.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -311,7 +342,7 @@ fun CalculatorPad (
                                 .aspectRatio(1f),
                             shape = RoundedCornerShape(8.dp)
                         ) {
-                            Text(text = number, style = MaterialTheme.typography.headlineSmall)
+                            Text(text = number, fontSize = 32.sp)
 
                         }
                     }
@@ -328,9 +359,15 @@ fun CalculatorPad (
                     .weight(1f)
                     .aspectRatio(1f),
                 shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(Color.Red)
+                colors = ButtonDefaults.buttonColors(Orange80)
             ) {
-                Text("DEL", style = MaterialTheme.typography.headlineSmall)
+
+                Icon(
+                    imageVector = Icons.Filled.Clear,
+                    contentDescription = "Slett",
+                    tint = Color.White,
+                    modifier = Modifier.size(72.dp)
+                )
             }
 
             Button(
@@ -340,7 +377,7 @@ fun CalculatorPad (
                     .aspectRatio(1f),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text("0", style = MaterialTheme.typography.headlineSmall)
+                Text("0", fontSize = 32.sp)
             }
 
             Button(
@@ -349,9 +386,15 @@ fun CalculatorPad (
                     .weight(1f)
                     .aspectRatio(1f),
                 shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(Color.Green)
+                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary)
             ) {
-                Text("SEND", style = MaterialTheme.typography.headlineSmall)
+
+                Icon(
+                    imageVector = Icons.Filled.Send,
+                    contentDescription = "Send",
+                    tint = Color.White,
+                    modifier = Modifier.size(56.dp)
+                )
             }
         }
 

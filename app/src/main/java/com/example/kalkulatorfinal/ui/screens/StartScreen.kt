@@ -1,13 +1,23 @@
 package com.example.kalkulatorfinal.ui.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,11 +29,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.kalkulatorfinal.R
 import com.example.kalkulatorfinal.ui.CalculatorViewModel
+import com.example.kalkulatorfinal.ui.components.AnswerDialog
 import com.example.kalkulatorfinal.ui.components.Dialog
+import com.example.kalkulatorfinal.ui.theme.Khaki
 
 @Composable
 fun StartScreen(navController: NavController, viewModel: CalculatorViewModel) {
@@ -48,25 +62,36 @@ fun StartScreen(navController: NavController, viewModel: CalculatorViewModel) {
             )
         ) {
             if (showDialog) {
-                Dialog(
-                    onDismissRequest = { showDialog = false },
+                AnswerDialog(
                     onConfirmation = {
                         showDialog = false
                     },
                     dialogTitle = "Ingen flere spørsmål",
-                    dialogText = "Du har gått tom for spørsmål!"
+                    dialogText = "Du har gått tom for spørsmål!",
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Filled.Star,
+                            contentDescription = "Stjerne",
+                            tint = Color.White,
+                            modifier = Modifier.size(72.dp)
+                        )
+                    }
                 )
             }
 
+            Image(
+                painter = painterResource(id = R.drawable.matte_icon),
+                contentDescription = "Logo",
+                modifier = Modifier.padding(32.dp)
+            )
 
-            Text(viewModel.noQuestionsLeft().toString())
 
             Button(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(32.dp),
                 contentPadding = PaddingValues(32.dp),
-                colors = ButtonDefaults.buttonColors(Color.Green),
+                shape = RoundedCornerShape(32.dp),
                 onClick = {
                 if (viewModel.noQuestionsLeft() <= 5) {
                     showDialog = true
@@ -74,15 +99,26 @@ fun StartScreen(navController: NavController, viewModel: CalculatorViewModel) {
                     navController.navigate("select-option")
                 }
             }) {
-                Text("Spill")
+                Icon(
+                    imageVector = Icons.Filled.PlayArrow,
+                    contentDescription = "Spill",
+                    tint = Color.White,
+                    modifier = Modifier.size(64.dp)
+                )
             }
             Button(
                 modifier = Modifier.padding(32.dp),
-                contentPadding = PaddingValues(16.dp),
+                contentPadding = PaddingValues(32.dp),
+                shape = RoundedCornerShape(32.dp),
                 onClick = {
                     navController.navigate("about-screen")
             }) {
-                Text("Om spillet")
+                Icon(
+                    imageVector = Icons.Filled.Info,
+                    contentDescription = "Spill",
+                    tint = Color.White,
+                    modifier = Modifier.size(40.dp)
+                )
             }
         }
     }
