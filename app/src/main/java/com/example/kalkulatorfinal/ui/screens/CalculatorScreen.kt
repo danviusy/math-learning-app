@@ -38,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -193,8 +194,8 @@ fun CalculatorScreen(navController: NavController, viewModel: CalculatorViewMode
                         viewModel.setInterruptStatus(true)
                         navController.navigate("start-screen")
                     },
-                    dialogTitle = "Avslutt spill",
-                    dialogText = "Er du sikker på at du vil avslutte spillet?",
+                    dialogTitle = stringResource(R.string.end_game),
+                    dialogText = stringResource(R.string.end_game_confirmation),
                     icon = {
                         Icon(
                             imageVector = Icons.Filled.Home,

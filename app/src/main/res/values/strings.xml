@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">KalkulatorFinal</string>
+    <string name="about_app">Denne appen gjør læring av matematikk morsomt og enkelt for barn. Det er små og enkle utfordringer i spillet som barna kan bruke til å øve på addisjon. Man kan velge å gjøre 5, 10 eller 15 oppgaver om gangen - altså den egner seg for hvilken som helst konsentrasjonsevne.</string>
+    <string name="no_questions_left">Ingen flere spørsmål</string>
+    <string name="end_game">Avslutt spill</string>
+    <string name="end_game_confirmation">Er du sikker på at du vil avslutte spillet?</string>
+    <string name="no_questions">Antall spørsmål</string>
+    <string name="game_done">Du har fullført spillet!</string>
 </resources>

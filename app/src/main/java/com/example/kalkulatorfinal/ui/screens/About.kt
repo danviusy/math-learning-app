@@ -24,8 +24,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.kalkulatorfinal.R
 import com.example.kalkulatorfinal.ui.CalculatorViewModel
 import com.example.kalkulatorfinal.ui.theme.Orange80
 
@@ -80,10 +82,7 @@ fun About(navController: NavController, viewModel: CalculatorViewModel) {
                     .padding(32.dp)
 
             ) {
-                Text("Denne appen gjør læring av matematikk morsomt og enkelt for barn. " +
-                        "Det er små og enkle utfordringer i spillet som barna kan bruke til å øve " +
-                        "på addisjon. Man kan velge å gjøre 5, 10 eller 15 oppgaver om gangen - " +
-                        "altså den egner seg for hvilken som helst konsentrasjonsevne.", color = MaterialTheme.colorScheme.onPrimary, fontSize = MaterialTheme.typography.titleLarge.fontSize)
+                Text(stringResource(R.string.about_app), color = MaterialTheme.colorScheme.onPrimary, fontSize = MaterialTheme.typography.titleLarge.fontSize)
             }
 
             Button(

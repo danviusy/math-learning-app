@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">KalkulatorFinal</string>
+    <string name="about_app">" This app makes learning math fun and easy for kids. There are small and simple challenges in the game that children can use to practice addition. You can choose to do 5, 10 or 15 tasks at a time - so it is suitable for any attention span."</string>
+    <string name="no_questions_left">No more questions!</string>
+    <string name="end_game">End game</string>
+    <string name="end_game_confirmation">Are you sure?</string>
+    <string name="no_questions">Number of questions</string>
+    <string name="game_done">You finished the game</string>
+</resources>

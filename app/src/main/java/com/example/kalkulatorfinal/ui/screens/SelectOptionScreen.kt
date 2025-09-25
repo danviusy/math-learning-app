@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -75,7 +76,7 @@ fun SelectOptionScreen(navController: NavController, viewModel: CalculatorViewMo
                     .padding(vertical = 32.dp, horizontal = 64.dp)
 
             ) {
-                Text("Antall spørsmål", color = MaterialTheme.colorScheme.onPrimary, fontSize = MaterialTheme.typography.titleLarge.fontSize)
+                Text(stringResource(R.string.no_questions), color = MaterialTheme.colorScheme.onPrimary, fontSize = MaterialTheme.typography.titleLarge.fontSize)
             }
 
             if (viewModel.noQuestionsLeft() >= 5) {

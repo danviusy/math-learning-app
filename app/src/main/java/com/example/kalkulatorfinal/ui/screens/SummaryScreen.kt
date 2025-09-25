@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.kalkulatorfinal.R
@@ -65,7 +66,7 @@ fun SummaryScreen(navController: NavController, viewModel: CalculatorViewModel) 
                     .padding(vertical = 32.dp, horizontal = 64.dp)
 
             ) {
-                Text("Du har fullført spillet!", color = MaterialTheme.colorScheme.onPrimary, fontSize = MaterialTheme.typography.titleLarge.fontSize)
+                Text(stringResource(R.string.game_done), color = MaterialTheme.colorScheme.onPrimary, fontSize = MaterialTheme.typography.titleLarge.fontSize)
             }
             Button(
                 shape = RoundedCornerShape(16.dp),

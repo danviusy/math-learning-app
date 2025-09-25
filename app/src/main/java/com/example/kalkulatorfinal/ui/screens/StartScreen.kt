@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -66,8 +67,8 @@ fun StartScreen(navController: NavController, viewModel: CalculatorViewModel) {
                     onConfirmation = {
                         showDialog = false
                     },
-                    dialogTitle = "Ingen flere spørsmål",
-                    dialogText = "Du har gått tom for spørsmål!",
+                    dialogTitle = stringResource(R.string.no_questions_left),
+                    dialogText = " ",
                     icon = {
                         Icon(
                             imageVector = Icons.Filled.Star,
