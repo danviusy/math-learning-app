@@ -19,7 +19,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -30,7 +29,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -39,11 +37,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.kalkulatorfinal.ui.CalculatorViewModel
 import com.example.kalkulatorfinal.ui.components.Dialog
@@ -57,12 +52,11 @@ fun CalculatorScreen(navController: NavController, viewModel: CalculatorViewMode
     var showDialog by remember { mutableStateOf(false) }
     val noEquations = viewModel.getPref()
     val calcUiState = viewModel.uiState.collectAsState()
-    val firstNumber = calcUiState.value.currentFirstNumber
-    val secondNumber = calcUiState.value.currentSecondNumber
-    val score = calcUiState.value.score
-    var roundIndex by remember { mutableStateOf(1) }
-    var answer by remember { mutableStateOf("") }
-    var correctGuess: Boolean? by remember { mutableStateOf(null) }
+    val firstNumber = calcUiState.value.currentFirstNumber // Henter første tall fra regnestykket
+    val secondNumber = calcUiState.value.currentSecondNumber // Henter andre tall fra regnestykket
+    var roundIndex by remember { mutableStateOf(1) } // Holder kontroll på hvor mange spørsmål som er gjort ila. en runde
+    var answer by remember { mutableStateOf("") } // Spiller-input skrives inn hit
+    var correctGuess: Boolean? by remember { mutableStateOf(null) } // Sjekker om svar er riktig eller feil
     var showAnswerDialog by remember { mutableStateOf(false) }
 
     Scaffold { innerPadding ->
@@ -71,8 +65,8 @@ fun CalculatorScreen(navController: NavController, viewModel: CalculatorViewMode
                 .padding(innerPadding)
         ) {
 
-            if (roundIndex >= noEquations) {
-                navController.navigate("summary-screen")
+            if (roundIndex >= noEquations) { // Når alle spørsmål ila. en runde er gjort
+                navController.navigate("summary-screen") // Navigerer til slutt-screenen
             }
 
             Box(
@@ -90,15 +84,16 @@ fun CalculatorScreen(navController: NavController, viewModel: CalculatorViewMode
                         modifier = Modifier.size(60.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        Image(
+                        Image( // Logo
                             painter = painterResource(id = R.drawable.matte_icon),
                             contentDescription = "Logo",
                             modifier = Modifier.fillMaxSize()
                         )
                     }
+                    // Antall spørsmål og total antall runder
                     Text("${roundIndex} / ${noEquations.toString()}", fontSize = 24.sp)
 
-                    Button(
+                    Button( // Avbryt runde-knapp
                         modifier = Modifier,
                         colors = ButtonDefaults.buttonColors(Orange80, Color.White),
                         onClick = { showDialog = true },
@@ -116,10 +111,7 @@ fun CalculatorScreen(navController: NavController, viewModel: CalculatorViewMode
 
             }
 
-
-
-
-            Box(
+            Box( // Regnestykke
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 16.dp),
@@ -129,10 +121,9 @@ fun CalculatorScreen(navController: NavController, viewModel: CalculatorViewMode
             }
 
 
-
             if (showAnswerDialog == true) {
                 if (correctGuess == true) {
-                    AnswerDialog(
+                    AnswerDialog( // Oppstår når svaret er riktig
                         icon = {
                             Icon(
                             imageVector = Icons.Filled.CheckCircle,
@@ -147,7 +138,7 @@ fun CalculatorScreen(navController: NavController, viewModel: CalculatorViewMode
                         dialogText = ""
                     )
 
-                } else {
+                } else { // Oppstår når svaret er feil
                     AnswerDialog(
                         icon = {
                             Icon(
@@ -166,32 +157,30 @@ fun CalculatorScreen(navController: NavController, viewModel: CalculatorViewMode
 
             }
 
-
-            CalculatorPad(
+            CalculatorPad( // Kalkulator-pad
                 onNumberClick = { number ->
-                answer += number
+                answer += number // Legger spiller-input i variablen answer
             },
                 onDeleteClick = {
                     answer = ""
                 },
                 onSendClick = {
-                    viewModel.checkAnswer(answer)
+                    viewModel.checkAnswer(answer) // Sjekker om svaret er riktig
                     correctGuess = viewModel.answerCorrect(answer)
                     showAnswerDialog = true
                     answer = ""
-                    roundIndex = roundIndex + 1
+                    roundIndex = roundIndex + 1 // Går til neste runde
                 },
                 currentInput = answer
 
             )
-
 
             if (showDialog) {
                 Dialog(
                     onDismissRequest = {showDialog = false },
                     onConfirmation = {
                         showDialog = false
-                        viewModel.setInterruptStatus(true)
+                        viewModel.setInterruptStatus(true) // Avbryter spill
                         navController.navigate("start-screen")
                     },
                     dialogTitle = stringResource(R.string.end_game),
@@ -210,71 +199,7 @@ fun CalculatorScreen(navController: NavController, viewModel: CalculatorViewMode
     }
 }
 
-
-@Composable
-fun NumberBox(
-    value: String,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier
-            .aspectRatio(1f)
-            .background(Color.Blue, RoundedCornerShape(8.dp)),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = value,
-            style = MaterialTheme.typography.headlineSmall,
-            color = Color.White,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth()
-        )
-    }
-
-}
-
-@Composable
-fun Operator(value: String) {
-    Box(
-        modifier = Modifier.size(32.dp), contentAlignment = Alignment.Center
-        ) {
-        Text(text = value, style = MaterialTheme.typography.headlineSmall)
-    }
-}
-/*
-@Composable
-fun EquationRow(
-    first: String,
-    second: String,
-    answer: String,
-    modifier: Modifier = Modifier,
-
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        NumberBox(
-            value = first,
-            modifier = Modifier
-                .weight(1f)
-        )
-        Operator(value = "+")
-        NumberBox(
-            value = second,
-            modifier = Modifier
-                .weight(1f)
-        )
-        Operator(value = "=")
-        NumberBox(
-            value = answer,
-            modifier = Modifier
-                .weight(1f)
-        )
-    }
-} */
-
+// Regnestykket
 @Composable
 fun Equation(
     first: String,
@@ -319,42 +244,39 @@ fun CalculatorPad (
     val numbers = listOf(
         listOf("1", "2", "3"),
         listOf("4", "5", "6"),
-        listOf("7", "8", "9"),
-        // listOf("", "0", "")
+        listOf("7", "8", "9")
     )
 
     Column (
         modifier = Modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
+        // Iterer gjennom hver rad i listen
         numbers.forEach { row ->
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                row.forEach { number ->
+                row.forEach { number -> // Iterer gjennom hvert nummer i listen
                     if (number.isEmpty()) {
                         Spacer(modifier = Modifier.weight(1f))
                     } else {
-                        Button(
-                            onClick = {onNumberClick(number)},
-                            modifier = Modifier
-                                .weight(1f)
-                                .aspectRatio(1f),
-                            shape = RoundedCornerShape(8.dp)
-                        ) {
-                            Text(text = number, fontSize = 32.sp)
-
-                        }
+                        NumberButton(
+                            number = number,
+                            onNumberClick = { onNumberClick(number) },
+                            modifier = Modifier.weight(1f)
+                        )
                     }
                 }
             }
         }
+
+        // Siste rad i kalkulator-paden: CLEAR, 0 og SEND
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
-            Button(
+            Button( // CLEAR-knapp som sletter spillet-input
                 onClick = { onDeleteClick() },
                 modifier = Modifier
                     .weight(1f)
@@ -362,7 +284,6 @@ fun CalculatorPad (
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(Orange80)
             ) {
-
                 Icon(
                     imageVector = Icons.Filled.Clear,
                     contentDescription = "Slett",
@@ -370,18 +291,13 @@ fun CalculatorPad (
                     modifier = Modifier.size(72.dp)
                 )
             }
+            NumberButton( // 0-knapp
+                number = "0",
+                onNumberClick = { onNumberClick("0") },
+                modifier = Modifier.weight(1f)
+            )
 
-            Button(
-                onClick = { onNumberClick("0") },
-                modifier = Modifier
-                    .weight(1f)
-                    .aspectRatio(1f),
-                shape = RoundedCornerShape(8.dp)
-            ) {
-                Text("0", fontSize = 32.sp)
-            }
-
-            Button(
+            Button( // Sender input for å sjekke om svaret er riktig
                 onClick = { onSendClick(currentInput) },
                 modifier = Modifier
                     .weight(1f)
@@ -400,7 +316,21 @@ fun CalculatorPad (
         }
 
     }
+}
 
+@Composable
+fun NumberButton( // Hver tall-knapp på kalkulator-paden
+    number: String,
+    onNumberClick: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Button(
+        onClick = {onNumberClick(number)},
+        modifier = modifier.aspectRatio(1f),
+        shape = RoundedCornerShape(8.dp)
+    ) {
+        Text(text = number, fontSize = 32.sp)
+    }
 }
 
 

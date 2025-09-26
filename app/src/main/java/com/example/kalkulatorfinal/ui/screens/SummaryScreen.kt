@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -29,11 +28,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.kalkulatorfinal.R
-import com.example.kalkulatorfinal.ui.CalculatorViewModel
 import com.example.kalkulatorfinal.ui.theme.Orange80
 
 @Composable
-fun SummaryScreen(navController: NavController, viewModel: CalculatorViewModel) {
+fun SummaryScreen(navController: NavController) {
     Scaffold { innerPadding ->
         Column (
             modifier = Modifier
@@ -46,13 +44,13 @@ fun SummaryScreen(navController: NavController, viewModel: CalculatorViewModel) 
                 alignment = Alignment.Top
             )
         ) {
-            Image(
+            Image( // Logo
                 painter = painterResource(id = R.drawable.matte_icon),
                 contentDescription = "Logo",
                 modifier = Modifier.padding(16.dp)
             )
 
-            Box(
+            Box( // Text-boks
                 modifier = Modifier
                     .background(
                         color = MaterialTheme.colorScheme.tertiary,
@@ -68,7 +66,7 @@ fun SummaryScreen(navController: NavController, viewModel: CalculatorViewModel) 
             ) {
                 Text(stringResource(R.string.game_done), color = MaterialTheme.colorScheme.onPrimary, fontSize = MaterialTheme.typography.titleLarge.fontSize)
             }
-            Button(
+            Button( // Returnerer tilbake til start-skjermen
                 shape = RoundedCornerShape(16.dp),
                 contentPadding = PaddingValues(32.dp),
                 onClick = {navController.navigate("start-screen")} )

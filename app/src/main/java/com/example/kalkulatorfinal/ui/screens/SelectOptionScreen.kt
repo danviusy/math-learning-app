@@ -24,18 +24,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.kalkulatorfinal.R
 import com.example.kalkulatorfinal.ui.CalculatorViewModel
@@ -43,13 +37,6 @@ import com.example.kalkulatorfinal.ui.theme.Orange80
 
 @Composable
 fun SelectOptionScreen(navController: NavController, viewModel: CalculatorViewModel) {
-    var noEquations by remember { mutableIntStateOf(5) }
-    val interruptStatus = viewModel.getInterruptStatus()
-
-    if (interruptStatus) {
-        viewModel.setInterruptStatus(true)
-        viewModel.interruptRound()
-    }
 
     Scaffold { innerPadding ->
         Column (
@@ -64,13 +51,12 @@ fun SelectOptionScreen(navController: NavController, viewModel: CalculatorViewMo
             )
         ) {
 
-            Image(
+            Image( // Logo
                 painter = painterResource(id = R.drawable.matte_icon),
                 contentDescription = "Logo",
                 modifier = Modifier.padding(16.dp)
             )
-
-            Box(
+            Box( // Tekst-boks
                 modifier = Modifier
                     .background(
                         color = MaterialTheme.colorScheme.tertiary,
@@ -86,54 +72,26 @@ fun SelectOptionScreen(navController: NavController, viewModel: CalculatorViewMo
             ) {
                 Text(stringResource(R.string.no_questions), color = MaterialTheme.colorScheme.onPrimary, fontSize = MaterialTheme.typography.titleLarge.fontSize)
             }
-
+            // Viser alternativene: 5, 10 og 15 basert på hvor mange spørsmål det er igjen
             if (viewModel.noQuestionsLeft() >= 5) {
                 Row (
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Button(
-                        // modifier = Modifier.padding(32.dp),
-                        contentPadding = PaddingValues(32.dp),
-                        shape = RoundedCornerShape(32.dp),
-                        onClick = {
-                            viewModel.setPref(5)
-                            viewModel.resetGame()
-                            navController.navigate("game-screen")
-                        } ) {
-                        Text(" 5 ", fontSize = MaterialTheme.typography.titleLarge.fontSize)
-                    }
+                    toGame(navController, viewModel, "5") // 5-spørsmål
                     if (viewModel.noQuestionsLeft() >= 10) {
-                        Button(
-                            contentPadding = PaddingValues(32.dp),
-                            shape = RoundedCornerShape(32.dp),
-                            onClick = {
-                            viewModel.setPref(10)
-                            viewModel.resetGame()
-                            navController.navigate("game-screen")
-                        }) {
-                            Text("10", fontSize = MaterialTheme.typography.titleLarge.fontSize)
-                        }
+                        toGame(navController, viewModel, "10") // 10-spørsmål
                         if (viewModel.noQuestionsLeft() >= 15) {
-                            Button(
-                                contentPadding = PaddingValues(32.dp),
-                                shape = RoundedCornerShape(32.dp),
-                                onClick = {
-                                viewModel.setPref(15)
-                                viewModel.resetGame()
-                                navController.navigate("game-screen")
-                            }) {
-                                Text("15", fontSize = MaterialTheme.typography.titleLarge.fontSize)
-                            }
+                            toGame(navController, viewModel, "15") // 15-spørsmål
                         }
                     }
                 }
             }
             Spacer(modifier = Modifier.height(8.dp))
-            Button(
+            Button( // Tilbake-knapp som navigerer til start-screen
                 colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary),
                 shape = RoundedCornerShape(16.dp),
-                contentPadding = PaddingValues(16.dp),
+                contentPadding = PaddingValues(32.dp),
                 onClick = {navController.navigate("start-screen")} )
             {
                 Icon(
@@ -144,5 +102,23 @@ fun SelectOptionScreen(navController: NavController, viewModel: CalculatorViewMo
                 )
             }
         }
+    }
+}
+
+@Composable
+fun toGame( // Navigasjons-knapp som fører til game-screen og lagrer verdi i SharedPreferences
+    navController: NavController,
+    viewModel: CalculatorViewModel,
+    value: String
+) {
+    Button(
+        contentPadding = PaddingValues(32.dp),
+        shape = RoundedCornerShape(32.dp),
+        onClick = {
+            viewModel.setPref(value.toInt())
+            viewModel.resetGame()
+            navController.navigate("game-screen")
+        }) {
+        Text(value, fontSize = MaterialTheme.typography.titleLarge.fontSize)
     }
 }
