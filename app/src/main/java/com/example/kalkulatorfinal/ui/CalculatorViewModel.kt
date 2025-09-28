@@ -130,6 +130,14 @@ class CalculatorViewModel(application: Application): AndroidViewModel(applicatio
         }
     }
 
+    fun saveLastGuess(guess: String) { // Brukt i siste spørsmålsrunde
+        _uiState.value = CalculatorUiState(
+            score = _uiState.value.score,
+            currentFirstNumber = _uiState.value.currentFirstNumber,
+            currentSecondNumber = _uiState.value.currentSecondNumber,
+            lastGuess = guess)
+    }
+
     fun getAnswer() : String { // Henter inn svar fra arrayet
         return answers[currentIndex - 1]
     }

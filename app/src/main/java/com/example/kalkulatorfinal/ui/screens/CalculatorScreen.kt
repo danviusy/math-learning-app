@@ -166,6 +166,8 @@ fun CalculatorScreen(navController: NavController, viewModel: CalculatorViewMode
                     onSendClick = {
                         if (roundIndex < noEquations) {
                             viewModel.checkAnswer(answer) // Sjekker om svaret er riktig
+                        } else {
+                            viewModel.saveLastGuess(answer)
                         }
                         correctGuess = viewModel.answerCorrect(answer)
                         showAnswerDialog = true

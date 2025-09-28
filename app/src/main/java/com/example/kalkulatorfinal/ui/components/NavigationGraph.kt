@@ -21,7 +21,7 @@ fun NavigationGraph(navController: NavHostController) {
         composable("start-screen") { StartScreen(navController = navController, calculatorViewModel) }
         composable("select-option") { SelectOptionScreen(navController = navController, calculatorViewModel) }
         composable("game-screen") { CalculatorScreen(navController = navController, calculatorViewModel) }
-        composable("summary-screen") { SummaryScreen(navController = navController) }
+        composable("summary-screen") { SummaryScreen(navController = navController, calculatorViewModel) }
         composable("about-screen") { About(navController = navController) }
     }
 }
