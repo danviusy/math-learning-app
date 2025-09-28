@@ -65,136 +65,141 @@ fun CalculatorScreen(navController: NavController, viewModel: CalculatorViewMode
                 .padding(innerPadding)
         ) {
 
-            if (roundIndex >= noEquations) { // Når alle spørsmål ila. en runde er gjort
+            if (roundIndex >= noEquations + 1) { // Når alle spørsmål ila. en runde er gjort
                 navController.navigate("summary-screen") // Navigerer til slutt-screenen
-            }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Row(
+            } else {
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Box(
-                        modifier = Modifier.size(60.dp),
-                        contentAlignment = Alignment.Center
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Image( // Logo
-                            painter = painterResource(id = R.drawable.matte_icon),
-                            contentDescription = "Logo",
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
-                    // Antall spørsmål og total antall runder
-                    Text("${roundIndex} / ${noEquations.toString()}", fontSize = 24.sp)
+                        Box(
+                            modifier = Modifier.size(60.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Image( // Logo
+                                painter = painterResource(id = R.drawable.matte_icon),
+                                contentDescription = "Logo",
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
+                        // Antall spørsmål og total antall runder
+                        Text("${roundIndex} / ${noEquations.toString()}", fontSize = 24.sp)
 
-                    Button( // Avbryt runde-knapp
-                        modifier = Modifier,
-                        colors = ButtonDefaults.buttonColors(Orange80, Color.White),
-                        onClick = { showDialog = true },
-                        shape = RoundedCornerShape(50),
+                        Button( // Avbryt runde-knapp
+                            modifier = Modifier,
+                            colors = ButtonDefaults.buttonColors(Orange80, Color.White),
+                            onClick = { showDialog = true },
+                            shape = RoundedCornerShape(50),
 
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Home,
-                            contentDescription = "Hjem",
-                            tint = Color.White,
-                            modifier = Modifier.size(32.dp)
-                        )
+                            ) {
+                            Icon(
+                                imageVector = Icons.Filled.Home,
+                                contentDescription = "Hjem",
+                                tint = Color.White,
+                                modifier = Modifier.size(32.dp)
+                            )
+                        }
                     }
+
                 }
 
-            }
-
-            Box( // Regnestykke
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Equation(firstNumber, secondNumber, answer, modifier = Modifier)
-            }
+                Box( // Regnestykke
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Equation(firstNumber, secondNumber, answer, modifier = Modifier)
+                }
 
 
-            if (showAnswerDialog == true) {
-                if (correctGuess == true) {
-                    AnswerDialog( // Oppstår når svaret er riktig
-                        icon = {
-                            Icon(
-                            imageVector = Icons.Filled.CheckCircle,
-                            contentDescription = "Riktig",
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(72.dp)
-                        )},
+                if (showAnswerDialog == true) {
+                    if (correctGuess == true) {
+                        AnswerDialog( // Oppstår når svaret er riktig
+                            icon = {
+                                Icon(
+                                    imageVector = Icons.Filled.CheckCircle,
+                                    contentDescription = "Riktig",
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(72.dp)
+                                )},
+                            onConfirmation = {
+                                showAnswerDialog = false
+                            },
+                            dialogTitle = "Riktig!",
+                            dialogText = ""
+                        )
+
+                    } else { // Oppstår når svaret er feil
+                        AnswerDialog(
+                            icon = {
+                                Icon(
+                                    imageVector = Icons.Filled.Clear,
+                                    contentDescription = "Feil",
+                                    tint = Orange80,
+                                    modifier = Modifier.size(72.dp)
+                                )},
+                            onConfirmation = {
+                                showAnswerDialog = false
+                            },
+                            dialogTitle = "Feil!",
+                            dialogText = "Svaret var ${viewModel.getAnswer()}"
+                        )
+                    }
+
+                }
+
+                CalculatorPad( // Kalkulator-pad
+                    onNumberClick = { number ->
+                        answer += number // Legger spiller-input i variablen answer
+                    },
+                    onDeleteClick = {
+                        answer = ""
+                    },
+                    onSendClick = {
+                        if (roundIndex < noEquations) {
+                            viewModel.checkAnswer(answer) // Sjekker om svaret er riktig
+                        }
+                        correctGuess = viewModel.answerCorrect(answer)
+                        showAnswerDialog = true
+                        answer = ""
+                        roundIndex = roundIndex + 1 // Går til neste runde
+
+                    },
+                    currentInput = answer
+
+                )
+
+                if (showDialog) {
+                    Dialog(
+                        onDismissRequest = {showDialog = false },
                         onConfirmation = {
-                            showAnswerDialog = false
+                            showDialog = false
+                            viewModel.setInterruptStatus(true) // Avbryter spill
+                            navController.navigate("start-screen")
                         },
-                        dialogTitle = "Riktig!",
-                        dialogText = ""
-                    )
-
-                } else { // Oppstår når svaret er feil
-                    AnswerDialog(
+                        dialogTitle = stringResource(R.string.end_game),
+                        dialogText = stringResource(R.string.end_game_confirmation),
                         icon = {
                             Icon(
-                                imageVector = Icons.Filled.Clear,
-                                contentDescription = "Feil",
+                                imageVector = Icons.Filled.Home,
+                                contentDescription = "Hjem",
                                 tint = Orange80,
                                 modifier = Modifier.size(72.dp)
-                            )},
-                        onConfirmation = {
-                            showAnswerDialog = false
-                        },
-                        dialogTitle = "Feil!",
-                        dialogText = "Svaret var ${viewModel.getAnswer()}"
+                            )
+                        }
                     )
                 }
-
             }
 
-            CalculatorPad( // Kalkulator-pad
-                onNumberClick = { number ->
-                answer += number // Legger spiller-input i variablen answer
-            },
-                onDeleteClick = {
-                    answer = ""
-                },
-                onSendClick = {
-                    viewModel.checkAnswer(answer) // Sjekker om svaret er riktig
-                    correctGuess = viewModel.answerCorrect(answer)
-                    showAnswerDialog = true
-                    answer = ""
-                    roundIndex = roundIndex + 1 // Går til neste runde
-                },
-                currentInput = answer
 
-            )
-
-            if (showDialog) {
-                Dialog(
-                    onDismissRequest = {showDialog = false },
-                    onConfirmation = {
-                        showDialog = false
-                        viewModel.setInterruptStatus(true) // Avbryter spill
-                        navController.navigate("start-screen")
-                    },
-                    dialogTitle = stringResource(R.string.end_game),
-                    dialogText = stringResource(R.string.end_game_confirmation),
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Filled.Home,
-                            contentDescription = "Hjem",
-                            tint = Orange80,
-                            modifier = Modifier.size(72.dp)
-                        )
-                    }
-                )
-            }
         }
     }
 }
