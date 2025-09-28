@@ -15,6 +15,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.kalkulatorfinal.ui.theme.Orange80
@@ -30,7 +31,7 @@ fun Dialog( // Dialog som brukes for når spiller avbryter runden
 ) {
     AlertDialog(
         icon = {},
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = Color.White,
         title = { Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
@@ -77,7 +78,7 @@ fun AnswerDialog( // Dialog som brukes når spiller har besvart alle spørsmål 
 ) {
     AlertDialog(
         icon = {},
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = Color.White,
         title = { Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
