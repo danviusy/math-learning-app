@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "KalkulatorFinal"
+rootProject.name = "MatteApp_demar4981"
 include(":app")
  
